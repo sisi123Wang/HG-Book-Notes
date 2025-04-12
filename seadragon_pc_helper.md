@@ -1,4 +1,4 @@
-## 💻 Using Seadragon on a PC: A Guide for Windows Users
+## Using Seadragon on a PC
 
 Most of my classmates use MacBooks, but as a PC user, I’ve had to troubleshoot my way through several challenges while accessing and working on **Seadragon**, our HPC cluster. Here's a collection of problems I encountered—and how I fixed (or worked around) them.
 
