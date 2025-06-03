@@ -1,21 +1,19 @@
-\documentclass{article}
-\usepackage{amsmath, fullpage}
+# Replicability analysis in genome-wide association studies via Cartesian hidden Markov models  
+### by Pengfei Wang, Wensheng Zhu  
+**Author**: Siyi Wang  
+**Date**: May 27, 2025  
 
-\begin{document}
+---
 
-\title{Replicability analysis in genome-wide association studies via Cartesian hidden Markov models by Pengfei Wang, Wensheng Zhu}
-\author{Siyi Wang}
-\date{May 27, 2025}
-\maketitle
-\thispagestyle{empty}
+## Introduction
 
-\section{Introduction}
 The question of replicability—whether an association observed in one study can be consistently observed in others—remains essential for ensuring robustness in GWAS findings. Heller and Yekutieli (2014) derived local Bayes false discovery rates for each SNP and proposed optimal rejection regions that minimize false negatives while controlling the FDR, enabling replicability assessment across multiple GWAS datasets.
 
-\section{Problem in the past}
+## Problem in the past
+
 While past studies were primarily designed to detect associations in at least one study, they were not necessarily meant to confirm replication across studies. Thus, a small p-value may not guarantee that the signal is detected in other studies, except in the case of extremely small p-values. The purpose of this paper is to develop a replicability analysis method that maintains FDR control while improving the ability to detect truly replicated associations.
 
-\section{Methods and Conclusion}
+## Methods and Conclusion
 
 In GWAS, adjacent SNPs tend to exhibit local dependency due to the co-segregation of nearby genomic loci during meiosis. As a result, SNPs in linkage disequilibrium are not statistically independent, and the assumption of p-value independence across the genome does not hold. This presents a challenge for statistical inference, particularly for replicability analysis, where ignoring the local correlation structure can reduce power and lead to incorrect error estimation.
 
@@ -28,5 +26,3 @@ This paper introduces the repLIS procedure, which leverages the CHMM framework. 
 Visualization via Manhattan plots illustrates that SNPs with strong pleiotropic effects, identified by repfdr and repLIS, tend to cluster on specific chromosomes, such as chromosomes 3 and 10, lying above the horizontal significance threshold. Simulation studies further confirm the theoretical guarantees of repLIS. The procedure maintains FDR control at the pre-specified level $\alpha$ and demonstrates lower false negative rates (FNR) and higher average true positive (ATP) counts, especially when the signal strength parameter $\mu$ increases. On ROC curves, repLIS achieves uniformly higher sensitivity compared to repfdr, indicating a more effective ranking of true replicated signals for a given number of rejections.
 
 In conclusion, repLIS provides an efficient and robust tool for detecting and ranking replicated associations in GWAS, particularly when accounting for the complex dependency structure of SNPs.
-
-\end{document}
