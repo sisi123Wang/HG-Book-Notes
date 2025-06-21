@@ -1,5 +1,5 @@
-# Replicability analysis in genome-wide association studies via Cartesian hidden Markov models  
-### by Pengfei Wang, Wensheng Zhu  
+# Replicability analysis for genome-wide association studies.
+### by Heller & Yekutieli. Annals of Applied Statistics. 2014.
 **Author**: Siyi Wang  
 **Date**: May 27, 2025  
 
