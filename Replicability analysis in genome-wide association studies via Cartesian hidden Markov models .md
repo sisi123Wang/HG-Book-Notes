@@ -138,13 +138,13 @@ $$
 $$
 \hat f_{i,+1}(z) =
 \begin{cases}
-\hat f_{i,A}(z), & z > 0,\\[4pt]
+\hat f_{i,A}(z), & z > 0,\\
 0,               & z \le 0
 \end{cases}
 \qquad
 \hat f_{i,-1}(z) =
 \begin{cases}
-\hat f_{i,A}(-z), & z < 0,\\[4pt]
+\hat f_{i,A}(-z), & z < 0,\\
 0,                & z \ge 0
 \end{cases}
 $$
