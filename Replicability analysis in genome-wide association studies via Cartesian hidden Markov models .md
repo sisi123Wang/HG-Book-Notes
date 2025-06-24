@@ -95,55 +95,64 @@ $$
 f(\mathbf z_j \mid \mathbf h)=\prod_{i=1}^n f_{i,h_i}(z_{ij}).
 $$
 
-3. **Local Bayes FDR**: In the single-study “two-group model”, the z-score of each SNP can be viewed as arising from a mixture of two types of distributions: with/without association. For a given z-value, the local Bayes FDR is the posterior probability that the SNP has no association. For multiple testing, a rejection region can be constructed based on a threshold $t$ such that the overall FDR is controlled. For the “no replicability” null hypothesis $H_0^{NR}$ (i.e., association in at most one study), let $\pi(\mathbf h)=\Pr(\mathbf H_j=\mathbf h)$. For observed $\mathbf z_j$,
+3. **Local Bayes FDR**:In the single-study "two-group model", the z-score of each SNP can be viewed as arising from a mixture of two types of distributions: with/without association. For a given z-value, the local Bayes FDR is the posterior probability that the SNP has no association. For multiple testing, a rejection region can be constructed based on a certain threshold $t$ such that the overall FDR is controlled. For "no replicability" null hypothesis $H_0^{NR}$ (i.e., association in at most one study), the local Bayes FDR, let $\pi(\mathbf h)=\Pr(\mathbf H_j=\mathbf h)$.
+For observed $\mathbf z_j$,
 
 $$
-\mathrm{fdr}_{H_0^{NR}}(\vec{z}_j)
-= \Pr(\vec{H}_j \in H_0^{NR} \mid \vec{z}_j)
-= \frac{\sum_{\vec{h} \in H_0^{NR}} \pi(\vec{h}) \, f(\vec{z}_j \mid \vec{h})}
-       {\sum_{\vec{h} \in \mathcal{H}}      \pi(\vec{h}) \, f(\vec{z}_j \mid \vec{h})}\,.
+fdr_{H_0^{NR}}(\vec{z_j})
+= P\bigl(\vec{H_j} \in H_0^{NR} \mid \vec{z_j}\bigr)
+= \frac{\sum_{\vec{h}\in H_0^{NR}}\pi(\vec{h})\,f(\vec{z_j}\mid \vec{h})}
+       {\sum_{\vec{h}\in\mathcal{H}}\pi(\vec{h})\,f(\vec{z_j}\mid \vec{h})}
 $$
 
-
-where $\pi(\vec{h})$ is the prior probability of configuration $\vec{h}$, and $f(\vec{z}_j|\vec{h}) = \prod_{i=1}^n f_i(z_{ij} \mid h_i)$. If this posterior probability is below a threshold, the SNP is determined to have cross-study replicability. Overall FDR can be controlled by ranking all SNPs’ local Bayes FDRs and selecting an appropriate threshold.
+where $\pi(\vec{h})$ is the prior probability of configuration $\vec{h}$, and
 
 $$
-H_{0}^{NR}: \left\{\vec{h}:\sum_{i=1}^n I(h_i=1) \le 1 \;\wedge\; \sum_{i=1}^n I(h_i=-1)\le 1 \right\},
+f(\vec{z_j}\mid \vec{h})
+= \prod_{i=1}^n f_i(z_{ij}\mid h_i).
 $$
 
-At most 1 positive association and at most 1 negative association; equivalently, at most one study shows association (regardless of direction) across all studies. We aim to reject $H_{0}^{NR}$, i.e., find SNPs that are “associated in at least two studies in the same direction”.
+If this posterior probability is below a threshold, the SNP is determined to have cross-study replicability. Overall FDR can be controlled by ranking all SNPs’ local Bayes FDRs and selecting an appropriate threshold.
+
+$$
+H_0^{NR} = \{\vec{h} :
+   \sum_{i=1}^n I(h_i=1)\le 1 \;\wedge\; \sum_{i=1}^n I(h_i=-1)\le 1\}
+$$
+
+At most 1 positive association and at most 1 negative association; equivalently, at most one study shows association (regardless of direction) across all studies. We aim to reject $H_0^{NR}$, i.e., find SNPs that are “associated in at least two studies in the same direction.”
+
 
 4. **Parameter Estimation**: For $n$ studies, each SNP in each study may exhibit “positive association (+1)”, “no association (0)”, or “negative association (−1)”. Therefore, the association status vector for each SNP has $3^n$ possible configurations. Replicability analysis here focuses on configurations where the same direction of association appears in at least two studies (such as at least two +1s or at least two −1s), rather than cases where association occurs in only one study. Here we need to estimate $\pi(\vec{h})$ for all configurations $\vec{h}$ and conditional densities $f_i(z|\pm1)$.
 
-- First, for each study, use the R package `locfdr` to estimate marginal density $f_i(z)$ and null proportion $\pi_0(i)$. For each study we estimate the marginal z-score density $f_i$ and the null proportion $\pi_0(i)$ via the \texttt{locfdr} package; the alternative density
+- First, for each study, use the R package `locfdr` to estimate marginal density \(f_i(z)\) and null proportion \(\pi_0(i)\).  For each study we estimate the marginal z-score density \(f_i\) and the null proportion \(\pi_0(i)\) via the `locfdr` package; the alternative density
 
-  $$
-  \hat f_{i,A}(z)
-    = 
-    \frac{\hat f_i(z)-\hat\pi_0(i)\phi(z)}
-         {1-\hat\pi_0(i)}
-    \quad\text{for }|z|>\Phi^{-1}(0.75)
-  $$
+$$
+\hat f_{i,A}(z)
+= \frac{\hat f_i(z) - \hat\pi_0(i)\,\phi(z)}
+       {1 - \hat\pi_0(i)}
+\quad\text{for }|z| > \Phi^{-1}(0.75).
+$$
 
-- To stabilise the tail estimates in each study we partition the observed $z$-scores into equal-frequency bins and replace every $z_{ij}$ by its bin centre $\tilde z_{ij}$. The resulting empirical alternative density $\hat f_{i,A}(z)$ is then split into two components,
+- To stabilise the tail estimates in each study we partition the observed $z$-scores into equal-frequency bins and replace every $z_{ij}$ by its bin centre $\tilde z_{ij}$.  The resulting empirical alternative density $\hat f_{i,A}(z)$ is then split into two components:
 
-  $$
-    \hat f_{i,+1}(z)=
-      \begin{cases}
-        \hat f_{i,A}(z), & z>0,\\[4pt]
-        0,               & z\le 0,
-      \end{cases}
-    \qquad
-    \hat f_{i,-1}(z)=
-      \begin{cases}
-        \hat f_{i,A}(-z), & z<0,\\[4pt]
-        0,                & z\ge 0,
-      \end{cases}
-  $$
+$$
+\hat f_{i,+1}(z) =
+\begin{cases}
+\hat f_{i,A}(z), & z > 0,\\[4pt]
+0,               & z \le 0
+\end{cases}
+\qquad
+\hat f_{i,-1}(z) =
+\begin{cases}
+\hat f_{i,A}(-z), & z < 0,\\[4pt]
+0,                & z \ge 0
+\end{cases}
+$$
 
   so that the positive and negative alternative densities are exact mirror images and have disjoint support.
 
-- Lastly use the Expectation-Maximization algorithm based on composite likelihood (assuming local approximate independence between SNPs) to jointly estimate the $\pi(\vec{h})$ distribution.
+- Lastly, use the Expectation-Maximization algorithm based on composite likelihood (assuming local approximate independence between SNPs) to jointly estimate the $\pi(\vec{h})$ distribution.
+
 
 5. **Optimal Rejection Region**: Among all rejection regions satisfying expected Bayes FDR $\leq q$, the optimal region is the set formed by local Bayes FDR $\leq t(q)$, maximizing discoveries while minimizing Bayes false negative rate.
 
